@@ -24,8 +24,7 @@ size_t read_input(char *fn, struct report rs[]) {
       cr->length = 0;
       int offset = 0;
       int read_count;
-      const int buffer_size = strlen(buffer);
-      while ((cr->length < levels_max) && offset < buffer_size &&
+      while ((cr->length < levels_max) &&
              (sscanf(buffer + offset, "%d%n", &cr->levels[cr->length],
                      &read_count) == 1)) {
         offset += read_count;
@@ -68,15 +67,48 @@ bool is_safe(struct report r) {
   return true;
 }
 
-int main() {
-  struct report reports[reports_max];
-  const size_t n_reports = read_input("../inputs/02.txt", reports);
+void part1(struct report rs[], size_t n) {
   int n_safe = 0;
-  for (size_t i = 0; i < n_reports; ++i) {
-    if (is_safe(reports[i])) {
+  for (size_t i = 0; i < n; ++i) {
+    if (is_safe(rs[i])) {
       n_safe += 1;
     }
   }
   printf("%d reports are safe.\n", n_safe);
+}
+
+void erase(struct report *r, size_t pos) {
+  for (size_t i = pos; i < r->length - 1; ++i) {
+    r->levels[i] = r->levels[i + 1];
+  }
+  --r->length;
+}
+
+void part2(struct report rs[], size_t n) {
+  int n_safe = 0;
+  for (size_t i = 0; i < n; ++i) {
+    if (is_safe(rs[i])) {
+      n_safe += 1;
+    } else {
+      struct report r = {};
+      for (size_t j = 0; j < rs[i].length; ++j) {
+        memcpy(r.levels, rs[i].levels, levels_max * sizeof(int));
+        r.length = rs[i].length;
+        erase(&r, j);
+        if (is_safe(r)) {
+          n_safe += 1;
+          break;
+        }
+      }
+    }
+  }
+  printf("%d reports are safe when using the Problem Damper.\n", n_safe);
+}
+
+int main() {
+  struct report rs[reports_max];
+  const size_t n = read_input("../inputs/02.txt", rs);
+  part1(rs, n);
+  part2(rs, n);
   return EXIT_SUCCESS;
 }

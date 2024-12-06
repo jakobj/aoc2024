@@ -1,64 +1,52 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-enum state {
-  Invalid,
-  M,
-  U,
-  L,
-  /* LP, */
-  N0,
-  /* C, */
-  N1,
-  /* RP, */
-};
-
 int main() {
-  enum state s = Invalid;
+  bool part1 = true;
   int n0;
   int n1;
-  char c;
   int sum = 0;
+  bool enabled = true;
+  char c;
   FILE *instream = fopen("../inputs/03.txt", "r");
   if (!instream) {
     return EXIT_FAILURE;
   }
   while ((c = fgetc(instream)) != EOF) {
-    switch (s) {
-    case Invalid:
-      s = (c == 'm') ? M : Invalid;
-      break;
-    case M:
-      s = (c == 'u') ? U : Invalid;
-      break;
-    case U:
-      s = (c == 'l') ? L : Invalid;
-      break;
-    case L:
-      if (c == '(') {
-        n0 = 0;
+    if (c == 'm') {
+      if (fgetc(instream) == 'u' && fgetc(instream) == 'l' &&
+          fgetc(instream) == '(') {
         fscanf(instream, "%d", &n0);
-        s = (n0 > 0) ? N0 : Invalid;
-      } else {
-        s = Invalid;
-      }
-      break;
-    case N0:
-      if (c == ',') {
-        n1 = 0;
+        if (n0 == 0) {
+          continue;
+        }
+        if (fgetc(instream) != ',') {
+          continue;
+        }
         fscanf(instream, "%d", &n1);
-        s = (n1 > 0) ? N1 : Invalid;
-      } else {
-        s = Invalid;
+        if (n1 == 0) {
+          continue;
+        }
+        if (fgetc(instream) != ')') {
+          continue;
+        }
+        if (part1 || enabled) {
+          sum += n0 * n1;
+        }
       }
-      break;
-    case N1:
-      if (c == ')') {
-        sum += n0 * n1;
+    } else if (c == 'd') {
+      if (fgetc(instream) == 'o') {
+        c = fgetc(instream);
+        if (c == '(' && fgetc(instream) == ')') {
+          enabled = true;
+        } else if (c == 'n' && fgetc(instream) == '\'' &&
+                   fgetc(instream) == 't' && fgetc(instream) == '(' &&
+                   fgetc(instream) == ')') {
+          enabled = false;
+        }
       }
-      s = Invalid;
-      break;
-    };
+    }
   }
   printf(
       "If you add up all of the results of the multiplications you get %d.\n",

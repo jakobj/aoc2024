@@ -13,6 +13,8 @@ int main() {
   if (!instream) {
     return EXIT_FAILURE;
   }
+  // TODO read into buffer and use lookahead to decide path; this approach will
+  // not work, for exmaple for subsequence "dmul" due to overconsumption
   while ((c = fgetc(instream)) != EOF) {
     if (c == 'm') {
       if (fgetc(instream) == 'u' && fgetc(instream) == 'l' &&

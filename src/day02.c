@@ -18,20 +18,21 @@ size_t read_input(char *fn, struct report rs[]) {
   size_t n = 0;
   char buffer[buf_max] = {};
   FILE *instream = fopen(fn, "r");
-  if (instream) {
-    while (fgets(buffer, buf_max, instream)) {
-      struct report *cr = &rs[n];
-      cr->length = 0;
-      int offset = 0;
-      int read_count;
-      while ((cr->length < levels_max) &&
-             (sscanf(buffer + offset, "%d%n", &cr->levels[cr->length],
-                     &read_count) == 1)) {
-        offset += read_count;
-        ++cr->length;
-      }
-      ++n;
+  if (!instream) {
+    exit(EXIT_FAILURE);
+  }
+  while (fgets(buffer, buf_max, instream)) {
+    struct report *cr = &rs[n];
+    cr->length = 0;
+    int offset = 0;
+    int read_count;
+    while ((cr->length < levels_max) &&
+           (sscanf(buffer + offset, "%d%n", &cr->levels[cr->length],
+                   &read_count) == 1)) {
+      offset += read_count;
+      ++cr->length;
     }
+    ++n;
   }
   return n;
 }

@@ -23,11 +23,7 @@ size_t read_input(char *fn, char array[array_max][array_max]) {
   return i;
 }
 
-int main() {
-  char *fn = "inputs/04.txt";
-  char array[array_max][array_max];
-  const size_t length = read_input(fn, array);
-
+void part1(char array[array_max][array_max], size_t length) {
   int count = 0;
   for (size_t i = 0; i < length; ++i) {
     for (size_t j = 0; j < length; ++j) {
@@ -52,5 +48,31 @@ int main() {
     }
   }
   printf("XMAS appears %d times.\n", count);
+}
+
+void part2(char array[array_max][array_max], size_t length) {
+  int count = 0;
+  for (size_t i = 1; i < length - 1; ++i) {
+    for (size_t j = 1; j < length - 1; ++j) {
+      if (array[i][j] == 'A') {
+        if (((array[i - 1][j - 1] == 'M' && array[i + 1][j + 1] == 'S') ||
+             (array[i - 1][j - 1] == 'S' && array[i + 1][j + 1] == 'M')) &&
+            ((array[i - 1][j + 1] == 'M' && array[i + 1][j - 1] == 'S') ||
+             (array[i - 1][j + 1] == 'S' && array[i + 1][j - 1] == 'M'))) {
+          ++count;
+        }
+      }
+    }
+  }
+  printf("X-MAS appears %d times.\n", count);
+}
+
+int main() {
+  char *fn = "inputs/04.txt";
+  char array[array_max][array_max];
+  const size_t length = read_input(fn, array);
+
+  part1(array, length);
+  part2(array, length);
   return EXIT_SUCCESS;
 }

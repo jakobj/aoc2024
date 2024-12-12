@@ -107,7 +107,7 @@ void part2(struct report rs[], size_t n) {
 
 int main() {
   struct report rs[reports_max];
-  const size_t n = read_input("../inputs/02.txt", rs);
+  const size_t n = read_input("inputs/02.txt", rs);
   part1(rs, n);
   part2(rs, n);
   return EXIT_SUCCESS;

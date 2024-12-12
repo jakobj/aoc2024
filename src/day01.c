@@ -52,7 +52,7 @@ void part2(int first[], int second[], int n_elements) {
 int main() {
   int first[array_max] = {};
   int second[array_max] = {};
-  const size_t n_elements = read_input("../inputs/01.txt", first, second);
+  const size_t n_elements = read_input("inputs/01.txt", first, second);
   part1(first, second, n_elements);
   part2(first, second, n_elements);
   return EXIT_SUCCESS;

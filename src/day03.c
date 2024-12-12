@@ -9,7 +9,7 @@ int main() {
   int sum = 0;
   bool enabled = true;
   char c;
-  FILE *instream = fopen("../inputs/03.txt", "r");
+  FILE *instream = fopen("inputs/03.txt", "r");
   if (!instream) {
     return EXIT_FAILURE;
   }
